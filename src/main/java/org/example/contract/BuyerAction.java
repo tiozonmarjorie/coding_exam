@@ -10,9 +10,7 @@ public interface BuyerAction {
 
     void bookASeat();
 
-    void cancelASeat();
-
-    void saveBooking(Show show, Booking booking);
+    void cancelBooking();
 
     void removeBooking(Show show, String ticketNumber, int phoneNumber);
 

@@ -12,8 +12,8 @@ import java.util.function.Consumer;
 
 public class Utils {
 
-    static Consumer<Booking> printBookingInfo = System.out::println;
-    static BiPredicate<Integer, Integer> testIfRowsAndSeatsAreValid = (n1, n2) -> n1 > 10 || n2 > 26;
+    public static Consumer<Booking> printBookingInfo = System.out::println;
+    public static BiPredicate<Integer, Integer> testIfRowsAndSeatsAreValid = (n1, n2) -> n1 > 10 || n2 > 26;
 
     public static boolean isSeatInvalid(Map<String, Boolean> seatMap, List<String> seatsList){
         Optional<String> seatOptional = seatsList
@@ -56,7 +56,7 @@ public class Utils {
         Map<Integer, Runnable> actions = new HashMap<>();
         actions.put(1, buyerAction::showAvailableSeats);
         actions.put(2, buyerAction::bookASeat);
-        actions.put(3, buyerAction::cancelASeat);
+        actions.put(3, buyerAction::cancelBooking);
         actions.put(4, () -> {});
         return actions;
     }

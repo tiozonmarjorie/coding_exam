@@ -1,5 +1,6 @@
 package org.example;
 
+import org.example.action.BookingProcessor;
 import org.example.contract.BuyerAction;
 import org.example.model.Booking;
 import org.example.model.Show;
@@ -41,30 +42,9 @@ public class BuyerActionImpl implements BuyerAction {
         String seats = s.next();
         List<String> seatsList = Arrays.asList(seats.split(","));
 
-        Show show = showStorage.getPersistedShow(showNumber);
-        Optional<Booking> bookingsOptional = show.getBookingsList()
-                .stream()
-                .filter(booking1 -> booking1.getMobileNumber() == phoneNumber)
-                .findAny();
-
-        if (bookingsOptional.isPresent()) {
-            System.out.println("====UNABLE TO BOOK A SHOW, PHONE NUMBER EXISTS!=====");
-        }else if (Utils.isSeatInvalid(show.getSeatMap(), seatsList)) {
-            System.out.println("====UNABLE TO BOOK A SHOW, SEATS ARE ALREADY TAKEN!====");
-        }else{
-            Booking booking = new Booking(showNumber, UUID.randomUUID(), phoneNumber, seatsList);
-            saveBooking(show, booking);
-        }
+        BookingProcessor bookingProcessor = new BookingProcessor(showStorage);
+        bookingProcessor.processBooking(showNumber, phoneNumber, seatsList);
     }
-
-    @Override
-    public void saveBooking(Show show, Booking booking) {
-        show.markSeatMap(booking.getSeatNumbers());
-        showStorage.addBooking(booking.getShowNumber(), booking);
-        System.out.println("======SUCCESSFULLY RESERVED A SEAT==========");
-        Utils.printBookingInfo.accept(booking);
-    }
-
     @Override
     public void removeBooking(Show show, String ticketNumber, int phoneNumber) {
         Optional<Booking> bookingsOptional = show.getBookingsList()
@@ -83,7 +63,7 @@ public class BuyerActionImpl implements BuyerAction {
     }
 
     @Override
-    public void cancelASeat() {
+    public void cancelBooking() {
 
         Scanner scanner = new Scanner(System.in);
         int limit = Utils.getTimeConfigLimit();
