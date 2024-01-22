@@ -72,7 +72,7 @@ public class BuyerActionImpl implements BuyerAction {
 
         Thread timerThread = new Thread(() -> {
             try {
-                Thread.sleep(TimeUnit.MINUTES.toMillis(limit)); // 2 minutes in milliseconds//120000
+                Thread.sleep(TimeUnit.MINUTES.toMillis(limit));
             } catch (InterruptedException e) {
                 System.out.println(e.getMessage());
             }
