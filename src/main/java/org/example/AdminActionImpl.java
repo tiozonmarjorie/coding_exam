@@ -19,7 +19,6 @@ public class AdminActionImpl implements AdminAction {
 
     @Override
     public void setUpShow() {
-
         Scanner scanner = new Scanner(System.in);
         scanner.useDelimiter("[\\s,]+");
         System.out.println("\nPlease fill up the following details separated by a space or a comma:");
@@ -56,7 +55,6 @@ public class AdminActionImpl implements AdminAction {
 
     @Override
     public void viewShow() {
-
         Scanner scanner = new Scanner(System.in);
         System.out.println("ENTER SHOW NUMBER:...");
         int showNumber = scanner.nextInt();
