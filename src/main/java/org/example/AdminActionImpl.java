@@ -33,8 +33,8 @@ public class AdminActionImpl implements AdminAction {
 
         if (Utils.testIfRowsAndSeatsAreValid.test(columns, rows)) {
             System.out.println("UNABLE TO ADD A SHOW. MAXIMUM SEATS PER ROW IS 10. MAXIMUM ROWS IS 26!");
-        }else {
-            Show show = new Show(showNumber,rows, columns, timeLimit);
+        } else {
+            Show show = new Show(showNumber, rows, columns, timeLimit);
             show.setSeatMap(initializeSeat(rows, columns));
             showStorage.addNewShow(showNumber, show);
             System.out.println("========SUCCESSFULLY ADDED NEW SHOW=======");
@@ -43,7 +43,6 @@ public class AdminActionImpl implements AdminAction {
     }
 
     @Override
-
     public Map<String, Boolean> initializeSeat(int rows, int seats) {
         return IntStream.rangeClosed(1, rows)
                 .boxed()
@@ -62,6 +61,6 @@ public class AdminActionImpl implements AdminAction {
         System.out.println("ENTER SHOW NUMBER:...");
         int showNumber = scanner.nextInt();
         Show show = showStorage.getPersistedShow(showNumber);
-        if (show!=null) show.getBookingsList().forEach(Utils.printBookingInfo);
+        if (show != null) show.getBookingsList().forEach(Utils.printBookingInfo);
     }
 }
