@@ -1,5 +1,7 @@
 package org.example;
 
+import org.example.contract.AdminAction;
+import org.example.contract.BuyerAction;
 import org.example.model.Booking;
 
 import java.io.FileInputStream;
@@ -28,5 +30,32 @@ public class Utils {
             //logger here
         }
         return Integer.parseInt(prop.getProperty("timeLimit"));
+    }
+
+    public static Map<Integer, Runnable> createActionsMap() {
+        Map<Integer, Runnable> actions = new HashMap<>();
+        actions.put(1, Main::adminDisplayMenu);
+        actions.put(2, Main::buyerDisplayMenu);
+        actions.put(3, () -> {});
+        return actions;
+    }
+
+    public static Map<Integer, Runnable> createAdminActionsMap() {
+        AdminAction adminAction = new AdminActionImpl();
+        Map<Integer, Runnable> actions = new HashMap<>();
+        actions.put(1, adminAction::setUpShow);
+        actions.put(2, adminAction::viewShow);
+        actions.put(3, () -> {});
+        return actions;
+    }
+
+    public static Map<Integer, Runnable> createBuyerActionsMap() {
+        BuyerAction buyerAction = new BuyerActionImpl();
+        Map<Integer, Runnable> actions = new HashMap<>();
+        actions.put(1, buyerAction::showAvailableSeats);
+        actions.put(2, buyerAction::bookASeat);
+        actions.put(3, buyerAction::cancelASeat);
+        actions.put(4, () -> {});
+        return actions;
     }
 }

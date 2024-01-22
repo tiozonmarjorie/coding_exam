@@ -55,6 +55,6 @@ public class AdminActionImpl implements AdminAction {
         System.out.println("ENTER SHOW NUMBER:...");
         int showNumber = scanner.nextInt();
         Show show = showStorage.getPersistedShow(showNumber);
-        show.getBookingsList().forEach(Utils.printBookingInfo);
+        if (show!=null) show.getBookingsList().forEach(Utils.printBookingInfo);
     }
 }
