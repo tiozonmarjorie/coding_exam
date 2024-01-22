@@ -7,11 +7,13 @@ import org.example.model.Booking;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.*;
+import java.util.function.BiPredicate;
 import java.util.function.Consumer;
 
 public class Utils {
 
     static Consumer<Booking> printBookingInfo = System.out::println;
+    static BiPredicate<Integer, Integer> testIfRowsAndSeatsAreValid = (n1, n2) -> n1 > 10 || n2 > 26;
 
     public static boolean isSeatInvalid(Map<String, Boolean> seatMap, List<String> seatsList){
         Optional<String> seatOptional = seatsList

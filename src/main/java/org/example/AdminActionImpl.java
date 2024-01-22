@@ -29,11 +29,15 @@ public class AdminActionImpl implements AdminAction {
         int columns = scanner.nextInt();
         int timeLimit = scanner.nextInt();
 
-        Show show = new Show(showNumber,rows, columns, timeLimit);
-        show.setSeatMap(initializeSeat(rows, columns));
-        showStorage.addNewShow(showNumber, show);
-        System.out.println("========SUCCESSFULLY ADDED NEW SHOW=======");
-        printShow.accept(showStorage.getPersistedShow(showNumber));
+        if (Utils.testIfRowsAndSeatsAreValid.test(columns, rows)) {
+            System.out.println("UNABLE TO ADD A SHOW. MAXIMUM SEATS PER ROW IS 10. MAXIMUM ROWS IS 26!");
+        }else {
+            Show show = new Show(showNumber,rows, columns, timeLimit);
+            show.setSeatMap(initializeSeat(rows, columns));
+            showStorage.addNewShow(showNumber, show);
+            System.out.println("========SUCCESSFULLY ADDED NEW SHOW=======");
+            printShow.accept(showStorage.getPersistedShow(showNumber));
+        }
     }
 
     @Override
