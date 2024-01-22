@@ -8,6 +8,8 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class AdminActionImpl implements AdminAction {
 
@@ -41,15 +43,16 @@ public class AdminActionImpl implements AdminAction {
     }
 
     @Override
+
     public Map<String, Boolean> initializeSeat(int rows, int seats) {
-        Map<String, Boolean> seatMap = new LinkedHashMap<>();
-        for (int row = 1; row <= rows; row++) {
-            for (int seat = 1; seat <= seats; seat++) {
-                String seatKey = String.format("%c%d", 'A' + row - 1, seat);
-                seatMap.put(seatKey, true);
-            }
-        }
-        return seatMap;
+        return IntStream.rangeClosed(1, rows)
+                .boxed()
+                .flatMap(row ->
+                        IntStream.rangeClosed(1, seats)
+                                .mapToObj(seat ->
+                                        String.format("%c%d", 'A' + row - 1, seat))
+                )
+                .collect(Collectors.toMap(seatKey -> seatKey, seatKey -> true, (a, b) -> a, LinkedHashMap::new));
     }
 
     @Override
