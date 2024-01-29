@@ -1,9 +1,9 @@
 package org.example;
 
-import org.example.refactor.AdminCommand;
-import org.example.refactor.BuyerCommand;
-import org.example.refactor.Command;
-import org.example.refactor.LoginCommand;
+import org.example.action.AdminCommand;
+import org.example.action.BuyerCommand;
+import org.example.action.LoginCommand;
+import org.example.contract.Command;
 
 import java.util.HashMap;
 import java.util.Map;

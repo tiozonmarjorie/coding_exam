@@ -1,4 +1,4 @@
-package org.example.refactor;
+package org.example.contract;
 
 public interface Command {
     void execute();

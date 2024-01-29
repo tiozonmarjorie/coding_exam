@@ -1,4 +1,4 @@
-import org.example.AdminActionImpl;
+import org.example.action.AdminActionImpl;
 import org.example.Utils;
 import org.example.storage.ShowStorage;
 import org.junit.jupiter.api.BeforeEach;
@@ -43,24 +43,6 @@ class BookingImplTest {
         int seats = 5;
         Map<String, Boolean> seatMap = Utils.initializeSeat(rows, seats);
         assertEquals(25, seatMap.size());
-    }
-
-    @Test
-    void testProcessBooking() {
-       /* Show mockShow = new Show(12345, 5, 5, 2);
-        Map<String, Boolean> seatMap = new HashMap<>();
-        seatMap.put("A1", true);
-        seatMap.put("A2", true);
-        seatMap.put("B1", true);
-        mockShow.setSeatMap(seatMap);
-
-        when(showStorageMock.getPersistedShow(anyInt())).thenReturn(mockShow);
-
-        BookingProcessor bookingProcessor = new BookingProcessor(showStorageMock);
-        String result = bookingProcessor.processBooking(11, 987654321, Arrays.asList("A1", "A2"));
-        assertEquals("Booking successful", result);
-
-        verify(showStorageMock, times(1)).getPersistedShow(anyInt());*/
     }
 
 }

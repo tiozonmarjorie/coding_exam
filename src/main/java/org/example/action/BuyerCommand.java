@@ -1,9 +1,9 @@
-package org.example.refactor;
+package org.example.action;
 
-import org.example.BuyerActionImpl;
 import org.example.Main;
 import org.example.Utils;
 import org.example.contract.BuyerAction;
+import org.example.contract.Command;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -11,7 +11,6 @@ import java.util.Scanner;
 
 public class BuyerCommand implements Command {
     private final BuyerAction buyerAction = new BuyerActionImpl();
-
     Map<Integer, Runnable> actions = new HashMap<>() {{
         put(1, buyerAction::showAvailableSeats);
         put(2, buyerAction::reserveSeat);

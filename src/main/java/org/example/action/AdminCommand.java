@@ -1,9 +1,9 @@
-package org.example.refactor;
+package org.example.action;
 
-import org.example.AdminActionImpl;
 import org.example.Main;
 import org.example.Utils;
 import org.example.contract.AdminAction;
+import org.example.contract.Command;
 
 import java.util.HashMap;
 import java.util.Map;
