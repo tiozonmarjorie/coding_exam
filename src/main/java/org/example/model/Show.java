@@ -13,7 +13,7 @@ public class Show {
     private final int numberOfSeatsPerRow;
     private final int cancellationTimeLimit;
 
-    private List<Booking> bookingList = new ArrayList<>();
+    private final List<Booking> bookingList = new ArrayList<>();
 
     private Map<String, Boolean> seatMap = new LinkedHashMap<>();
 
@@ -24,33 +24,17 @@ public class Show {
         this.cancellationTimeLimit = cancellationTimeLimit;
     }
 
-    public int getShowNumber() {
-        return showNumber;
-    }
-
-    public int getNumberOfRows() {
-        return numberOfRows;
-    }
-
-    public int getNumberOfSeatsPerRow() {
-        return numberOfSeatsPerRow;
-    }
-
-    public int getCancellationTimeLimit() {
-        return cancellationTimeLimit;
-    }
-
-    public void markSeatMap(List<String> seatsList){
+    public void markSeatMap(List<String> seatsList) {
         seatsList.forEach(s -> {
-            if (this.seatMap.containsKey(s)){
+            if (this.seatMap.containsKey(s)) {
                 this.seatMap.replace(s, false);
             }
         });
     }
 
-    public void unMarkSeatMap(List<String> seatsList){
+    public void unMarkSeatMap(List<String> seatsList) {
         seatsList.forEach(s -> {
-            if (this.seatMap.containsKey(s)){
+            if (this.seatMap.containsKey(s)) {
                 this.seatMap.replace(s, true);
             }
         });
@@ -74,10 +58,6 @@ public class Show {
 
     public List<Booking> getBookingsList() {
         return bookingList;
-    }
-
-    public void setBookingsList(List<Booking> bookingList) {
-        this.bookingList = bookingList;
     }
 
     @Override

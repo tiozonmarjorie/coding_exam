@@ -1,68 +1,41 @@
 package org.example;
 
-import java.util.*;
+import org.example.action.AdminCommand;
+import org.example.action.BuyerCommand;
+import org.example.action.LoginCommand;
+import org.example.contract.Command;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Scanner;
 
 public class Main {
+    private static final Map<Integer, Command> userCommandMap = new HashMap<>() {{
+        put(1, new AdminCommand());
+        put(2, new BuyerCommand());
+    }};
 
     public static void main(String[] args) {
-       displayMenu();
+        displayMenu();
     }
 
-    private static void displayMenu() {
-        System.out.println("\nLogin as...");
-        System.out.println("1. ADMIN");
-        System.out.println("2. BUYER");
-        login();
-    }
-
-    private static void login(){
+    public static void displayMenu() {
         Scanner scanner = new Scanner(System.in);
-        Map<Integer, Runnable> actions = Utils.createActionsMap();
+        System.out.println("\nLOGIN AS. Please choose your option..");
+        System.out.println("[1]. ADMIN");
+        System.out.println("[2]. BUYER");
+        System.out.println("[0]. EXIT");
         while (true) {
             int choice = scanner.nextInt();
-            if (actions.containsKey(choice)) {
-                actions.get(choice).run();
-                displayMenu();
+            if (userCommandMap.containsKey(choice)) {
+                Command userCommand = userCommandMap.get(choice);
+                LoginCommand booking = new LoginCommand();
+                booking.login(userCommand);
             } else {
-                System.out.println("INVALID INPUT PLEASE TRY AGAIN..");
+                System.out.println("Invalid input. Please enter valid number.");
             }
-        }
-    }
-
-    static void adminDisplayMenu(){
-        System.out.println("\nPlease choose your option...");
-        System.out.println("1. SET UP SHOW");
-        System.out.println("2. VIEW A SHOW");
-        System.out.println("3. BACK");
-        Scanner scanner = new Scanner(System.in);
-        Map<Integer, Runnable> actions = Utils.createAdminActionsMap();
-        while (true) {
-            int choice = scanner.nextInt();
-            if (actions.containsKey(choice)) {
-                actions.get(choice).run();
-                displayMenu();
-            } else {
-                System.out.println("INVALID INPUT PLEASE TRY AGAIN..");
-            }
-        }
-    }
-
-    static void buyerDisplayMenu(){
-        System.out.println("\nPlease choose your option...");
-        System.out.println("1. AVAILABLE SEATS");
-        System.out.println("2. BOOK A SEAT");
-        System.out.println("3. CANCEL A SEAT");
-        System.out.println("4. BACK");
-
-        Scanner scanner = new Scanner(System.in);
-        Map<Integer, Runnable> actions = Utils.createBuyerActionsMap();
-        while (true) {
-            int choice = scanner.nextInt();
-            if (actions.containsKey(choice)) {
-                actions.get(choice).run();
-                displayMenu();
-            } else {
-                System.out.println("INVALID INPUT PLEASE TRY AGAIN..");
+            if (Utils.shouldExit(choice)) {
+                break;
             }
         }
     }
