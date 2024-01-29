@@ -5,9 +5,9 @@ import java.util.UUID;
 
 public class Booking {
 
-    private int showNumber;
-    private UUID ticketNumber;
-    private int mobileNumber;
+    private final int showNumber;
+    private final UUID ticketNumber;
+    private final int mobileNumber;
     private List<String> seatNumbers;
 
     public Booking(int showNumber, UUID ticketNumber, int mobileNumber, List<String> seatNumbers) {
@@ -31,6 +31,10 @@ public class Booking {
 
     public List<String> getSeatNumbers() {
         return seatNumbers;
+    }
+
+    public void setSeatNumbers(List<String> seatNumbers) {
+        this.seatNumbers = seatNumbers;
     }
 
     @Override

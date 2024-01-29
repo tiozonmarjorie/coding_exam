@@ -1,75 +1,75 @@
 package org.example;
 
-import org.example.action.BookingProcessor;
 import org.example.contract.BuyerAction;
-import org.example.model.Booking;
 import org.example.model.Show;
 import org.example.storage.ShowStorage;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
-public class BuyerActionImpl implements BuyerAction {
+import java.util.stream.Collectors;
+
+public class BuyerActionImpl extends BookingProcessor implements BuyerAction {
     private final ShowStorage showStorage = ShowStorage.getInstance();
-    private static boolean userInput = false;
+    private static volatile boolean userInput = false;
+    private static int showNumber; // for cancellation of seats;
 
     @Override
     public void showAvailableSeats() {
-
-        System.out.println("ENTER SHOW NUMBER:");
-        Scanner s = new Scanner(System.in);
-        Show show = showStorage.getPersistedShow(s.nextInt());
-        if (show !=null){
-            List<String> availableSeats = new ArrayList<>();
-            show.getSeatMap().forEach((key, value) -> {
-                if (value) availableSeats.add(key);
-            });
-            System.out.println("AVAILABLE SEATS : " + String.join(",", availableSeats));
+        System.out.println("Enter Show Number:");
+        Scanner scanner = new Scanner(System.in);
+        int showNumber = scanner.nextInt();
+        Show show = showStorage.getPersistedShow(showNumber);
+        if (show != null) {
+            List<String> availableSeats = show.getSeatMap()
+                    .entrySet()
+                    .stream()
+                    .filter(Map.Entry::getValue)
+                    .map(Map.Entry::getKey)
+                    .collect(Collectors.toList());
+            if (!availableSeats.isEmpty()) {
+                System.out.println("Available Seats: " + String.join(",", availableSeats));
+            } else {
+                System.out.println("No available seats.");
+            }
+        } else {
+            System.out.println("Show not found.");
         }
     }
 
     @Override
-    public void bookASeat() {
+    public void reserveSeat() {
         System.out.println("\nPlease fill up the following details:");
-        Scanner s = new Scanner(System.in);
-
-        System.out.println("SHOW NUMBER:");
-        int showNumber = s.nextInt();
-
-        System.out.println("PHONE NUMBER:");
-        int phoneNumber = s.nextInt();
-
-        System.out.println("ENTER DESIRED SEATS, separated by a comma:\nexample: A1,A2");
-        String seats = s.next();
+        Scanner scanner = new Scanner(System.in);
+        showNumber = Utils.readInt(scanner, "Enter Show Number:");
+        int phoneNumber = Utils.readInt(scanner, "Enter Phone Number:");
+        String seats = Utils.readString(scanner, "Enter desired seats, separated by a comma:\nexample: A1,A2");
         List<String> seatsList = Arrays.asList(seats.split(","));
-
-        BookingProcessor bookingProcessor = new BookingProcessor(showStorage);
-        bookingProcessor.processBooking(showNumber, phoneNumber, seatsList);
-    }
-    @Override
-    public void removeBooking(Show show, String ticketNumber, int phoneNumber) {
-        Optional<Booking> bookingsOptional = show.getBookingsList()
-                .stream()
-                .filter(b ->  b.getTicketNumber().toString().equals(ticketNumber)
-                        && b.getMobileNumber() == phoneNumber)
-                .findFirst();
-
-        if (bookingsOptional.isPresent()) {
-            Booking booking = bookingsOptional.get();
-            List<String> seats = booking.getSeatNumbers();
-            show.unMarkSeatMap(seats);
-            show.removeBooking(booking);
-            System.out.println("======SUCCESSFULLY CANCELLED========");
-        }
+        processBooking(showNumber, phoneNumber, seatsList);
     }
 
     @Override
-    public void cancelBooking() {
-
+    public void cancelSeat() {
         Scanner scanner = new Scanner(System.in);
         int limit = Utils.getTimeConfigLimit();
         System.out.println("SYSTEM NOTICE - YOU ARE ONLY ALLOWED TO CANCEL SEAT IN "
                 + limit + "minutes..");
+        Thread timerThread = startTimerThread(limit);
+        userInput(scanner);
 
+        String ticketNumber = Utils.readString(scanner, "Enter Ticket Number:");
+        int phoneNumber = Utils.readInt(scanner, "Enter Phone Number:");
+
+        userInput = true;
+        timerThread.interrupt();
+
+        Show show = showStorage.getPersistedShow(showNumber);
+        removeBooking(show, ticketNumber, phoneNumber);
+    }
+
+    private Thread startTimerThread(int limit) {
         Thread timerThread = new Thread(() -> {
             try {
                 Thread.sleep(TimeUnit.MINUTES.toMillis(limit));
@@ -82,19 +82,13 @@ public class BuyerActionImpl implements BuyerAction {
             }
         });
         timerThread.start();
+        return timerThread;
+    }
+
+    private void userInput(Scanner scanner) {
         scanner.useDelimiter("[\\s,]+");
         System.out.println("\nPlease fill up the following details separated by a SPACE or a COMMA:");
         System.out.println("[Show Number] [Ticket Number] [Phone Number]");
         System.out.println("ex: 1111, ea335-adsffd, 123456789");
-
-        int showNumber = scanner.nextInt();
-        String ticketNumber = scanner.next();
-        int phoneNumber = scanner.nextInt();
-
-        userInput = true;
-        timerThread.interrupt();
-
-        Show show = showStorage.getPersistedShow(showNumber);
-        removeBooking(show, ticketNumber, phoneNumber);
     }
 }

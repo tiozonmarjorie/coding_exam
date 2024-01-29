@@ -10,7 +10,6 @@ public class ShowStorage {
 
     private final static ShowStorage instance = new ShowStorage();
     private final Map<Integer, Show> showMap = new LinkedHashMap<>();
-    private final Map<Integer, Booking> bookingsMap = new LinkedHashMap<>();
 
     private ShowStorage(){
 
@@ -23,7 +22,6 @@ public class ShowStorage {
     public void addBooking(Integer showNumber, Booking booking) {
         Show show = getPersistedShow(showNumber);
         show.addBooking(booking);
-        bookingsMap.put(showNumber, booking);
     }
 
     public Show getPersistedShow(Integer showNumber){
