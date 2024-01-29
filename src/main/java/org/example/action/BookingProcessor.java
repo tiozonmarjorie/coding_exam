@@ -7,8 +7,8 @@ import org.example.storage.ShowStorage;
 
 import java.util.*;
 
-abstract class BookingProcessor {
-    private final ShowStorage showStorage = ShowStorage.getInstance();
+public abstract class BookingProcessor {
+    private ShowStorage showStorage = ShowStorage.getInstance();
     public void processBooking(int showNumber, int phoneNumber, List<String> seatsList) {
         Show show = showStorage.getPersistedShow(showNumber);
         Optional<Booking> bookingsOptional = show.getBookingsList()
@@ -52,9 +52,7 @@ abstract class BookingProcessor {
 
     private void rebook(Show show, Booking booking) {
         Scanner scanner = new Scanner(System.in);
-        int choice = Utils.readInt(scanner, "DO YOU STILL WANT TO RESERVE SEATS?");
-        System.out.println("[1].RESERVE SEAT:");
-        System.out.println("[2].CANCEL BOOKING:");
+        int choice = Utils.readInt(scanner, "DO YOU STILL WANT TO RESERVE SEATS?\n[1]. RESERVE SEAT\n[2]. CANCEL BOOKING");
         if (choice == 1) {
             String input = Utils.readString(scanner, "Enter desired seats, separated by a comma:\nexample: A1,A2:");
             List<String> seatsList = Arrays.asList(input.split(","));
@@ -67,4 +65,9 @@ abstract class BookingProcessor {
         }
     }
 
+
+//////for unit test only
+    public void setShowStorage(ShowStorage showStorage) {
+        this.showStorage = showStorage;
+    }
 }
